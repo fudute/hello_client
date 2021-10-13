@@ -11,18 +11,21 @@ import (
 )
 
 func main() {
-	cc, err := grpc.Dial("hello:8080", grpc.WithInsecure(), grpc.WithBlock())
+	cc, err := grpc.Dial("127.0.0.1:8080", grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	cli := helloserice.NewHelloServiceClient(cc)
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-	resp, err := cli.Hello(ctx, &helloserice.HelloRequest{Name: "fudute"})
-	if err != nil {
-		log.Fatal(err)
-	}
+	for {
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		resp, err := cli.Hello(ctx, &helloserice.HelloRequest{Name: "fudute"})
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("resp: %v\n", resp)
+		time.Sleep(time.Second)
 
-	fmt.Printf("resp: %v\n", resp)
+		cancel()
+	}
 }
