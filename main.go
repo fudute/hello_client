@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	cc, err := grpc.Dial("127.0.0.1:8080", grpc.WithInsecure(), grpc.WithBlock())
+	cc, err := grpc.Dial("hello:8080", grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		log.Fatal(err)
 	}
